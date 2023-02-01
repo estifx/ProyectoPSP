@@ -8,5 +8,7 @@ public class Cliente {
 		int puerto = 6000;
 
 		Socket cliente = new Socket(host, puerto); 
+		
+		
 	}
 }
