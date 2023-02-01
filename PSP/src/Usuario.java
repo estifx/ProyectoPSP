@@ -5,19 +5,21 @@ public class Usuario {
 	private String contrasena;
 	private String email;
 	private String telefono;
+	private String dni;
 	
-	public Usuario(String nombre, String contrasena, String email,String telefono) {
+	public Usuario(String nombre, String contrasena, String email,String telefono, String dni) {
 
 		this.nombre = nombre;
 		this.contrasena = contrasena;
 		this.email = email;
 		this.telefono = telefono;
+		this.dni = dni;
 	}
 
 	@Override
 	public String toString() {
 		return "Usuario [nombre=" + nombre + ", contrasena=" + contrasena
-				+ ", email=" + email + ", email="+ telefono +"]";
+				+ ", email=" + email + ", email="+ telefono +", dni= "+dni+"]";
 	}
 
 	public String getNombre() {
