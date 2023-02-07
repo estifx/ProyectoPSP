@@ -6,6 +6,7 @@ public class Usuario {
 	private String contrasena;
 	private String email;
 	private String telefono;
+	
 	private String dni;
 	
 	public Usuario(String nombre, String contrasena, String email,String telefono, String dni) {
