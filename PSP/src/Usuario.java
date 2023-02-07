@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class Usuario {
 	
@@ -54,5 +55,9 @@ public class Usuario {
 		this.telefono = telefono;
 	}
 	
-	
+	public boolean comprobarListaUsuarios(List<Usuario> listaUsuarios) {
+		boolean comprobado=false;
+		return comprobado;
+		
+	}
 }
