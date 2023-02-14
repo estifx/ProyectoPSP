@@ -101,26 +101,33 @@ public class Operaciones {
 		return insertado;
 	}
 	
-	public boolean buscarCuenta(int numCuenta) throws ClassNotFoundException, SQLException {
+	public double buscarSaldoCuenta(int numCuenta) throws ClassNotFoundException, SQLException {
 
 		boolean ingresado=false;
 		Connection conexion = null;
-		
+		double saldo=0;
 		try {
 
 			Class.forName("org.sqlite.JDBC");
 			SQLiteConfig config = new SQLiteConfig();
 			config.enforceForeignKeys(true);
 			conexion = DriverManager.getConnection("jdbc:sqlite:db\\personal.db");
-			String sentenciaInsertar = "SELECT saldo FROM cuenta" + "JOIN usuario  on(dni=dni_usuario)"
+			String sentenciaConsultar = "SELECT saldo FROM cuenta" + "JOIN usuario  on(dni=dni_usuario)"
 									+ "	where num_cuenta = "+numCuenta;
-		}
+			Statement sentencia = conexion.createStatement();
+			ResultSet resultado = sentencia.executeQuery(sentenciaConsultar);				
+			
+			if(resultado.next()) {
+				saldo=resultado.getDouble("saldo");
+			}
+			
+}
 		finally {
 			if (conexion != null) {
 				conexion.close();
 			}
 		}
-		return ingresado;
+		return saldo;
 
 		//esquema main
 		//se solicita un numero de cuenta
@@ -133,6 +140,22 @@ public class Operaciones {
 		//si no, mensaje de error
 		
 		
+		
+	}
+	
+	public boolean insertarSaldo(int cantidadInsertada,int numCuenta) throws ClassNotFoundException, SQLException {
+		boolean insercionValida = false;
+		
+		double saldoActual= buscarSaldoCuenta(numCuenta);
+		
+		if(cantidadInsertada>0 && cantidadInsertada<=60000) {
+			insercionValida=true;
+			
+			saldoActual=saldoActual+cantidadInsertada;
+		}
+		
+		
+		return insercionValida;
 		
 	}
 	
