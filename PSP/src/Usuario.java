@@ -61,4 +61,14 @@ public class Usuario {
 		return comprobado;
 		
 	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+	
+	
 }
