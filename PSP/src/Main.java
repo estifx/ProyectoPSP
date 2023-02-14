@@ -13,9 +13,12 @@ public class Main {
 
 		System.out.println("--------  Servidor -----------");
 		System.out.println("Servidor iniciado...\n");
+		System.out.println("0 para salir");
 		System.out.println("1 para iniciar sesión");
 		System.out.println("2 realizar transferencia");
-		System.out.println("0 para salir");
+		System.out.println("3 añadir saldo a la cuenta");
+
+		
 
 		codigo = Teclado.leerEntero("Opción a elegir:");
 		while (true) { 
