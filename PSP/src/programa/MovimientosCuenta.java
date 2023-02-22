@@ -1,6 +1,6 @@
+package programa;
 
 public class MovimientosCuenta {
-	
 	private Fecha fecha;
 	private String concepto;
 	private double importe;
@@ -21,6 +21,5 @@ public class MovimientosCuenta {
 				+ cuenta + "]";
 	}
 
-	
-	
+
 }

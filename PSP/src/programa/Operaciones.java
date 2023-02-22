@@ -1,4 +1,4 @@
-
+package programa;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -43,12 +43,21 @@ public class Operaciones {
 		return existeUsuario;
 	}
 	
-	public void transferir(Cuenta cuenta) {
+	public static boolean ingresarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
+		boolean transferido=false;
+		double saldo;
+		int filasInsertadas= 0,numCuenta;
 		
+		numCuenta = cuenta.getNumCuenta();
+		saldo = cuenta.getSaldo();
+		
+		String sentenciaModificar = "UPDATE cuenta SET saldo = "+ saldo + " WHERE num_cuenta = "+ numCuenta;
+		filasInsertadas = ejecutarModificacion(sentenciaModificar);
+		if(filasInsertadas == 1) {
+			transferido=true;
+		}
+		return transferido;
 	}
-	
-	
-	
 	
 	//Insertar usuarios en BD para pruebas
 	
@@ -100,64 +109,5 @@ public class Operaciones {
 		}
 		return insertado;
 	}
-	
-	public double buscarSaldoCuenta(int numCuenta) throws ClassNotFoundException, SQLException {
 
-		boolean ingresado=false;
-		Connection conexion = null;
-		double saldo=0;
-		try {
-
-			Class.forName("org.sqlite.JDBC");
-			SQLiteConfig config = new SQLiteConfig();
-			config.enforceForeignKeys(true);
-			conexion = DriverManager.getConnection("jdbc:sqlite:db\\personal.db");
-			String sentenciaConsultar = "SELECT saldo FROM cuenta" + "JOIN usuario  on(dni=dni_usuario)"
-									+ "	where num_cuenta = "+numCuenta;
-			Statement sentencia = conexion.createStatement();
-			ResultSet resultado = sentencia.executeQuery(sentenciaConsultar);				
-			
-			if(resultado.next()) {
-				saldo=resultado.getDouble("saldo");
-			}
-			
-}
-		finally {
-			if (conexion != null) {
-				conexion.close();
-			}
-		}
-		return saldo;
-
-		//esquema main
-		//se solicita un numero de cuenta
-		//ejecutamos metodo para buscar cuenta
-		
-		//si se encuentra se procede a añadir saldo 
-		//ejecutamos metodo para añadir saldo
-		//mostrar saldo final por pantalla
-		
-		//si no, mensaje de error
-		
-		
-		
-	}
-	
-	public boolean insertarSaldo(int cantidadInsertada,int numCuenta) throws ClassNotFoundException, SQLException {
-		boolean insercionValida = false;
-		
-		double saldoActual= buscarSaldoCuenta(numCuenta);
-		
-		if(cantidadInsertada>0 && cantidadInsertada<=60000) {
-			insercionValida=true;
-			
-			saldoActual=saldoActual+cantidadInsertada;
-		}
-		
-		
-		return insercionValida;
-		
-	}
-	
-	
 }

@@ -1,21 +1,25 @@
-import java.util.List;
+package programa;
 
-public class Usuario {
-	
+import java.io.Serializable;
+
+public class Usuario implements Serializable{
 	private String nombre;
 	private String contrasena;
 	private String email;
 	private String telefono;
-	
 	private String dni;
 	
-	public Usuario(String nombre, String contrasena, String email,String telefono, String dni) {
-
-		this.nombre = nombre;
-		this.contrasena = contrasena;
-		this.email = email;
-		this.telefono = telefono;
+	public Usuario(String dni, String nombre, String email,String contrasena, String telefono) {
 		this.dni = dni;
+		this.nombre = nombre;
+		this.email = email;
+		this.contrasena = contrasena;
+		this.telefono = telefono;	
+	}
+	
+	public Usuario(String email, String contrasena) {
+		this.email = email;
+		this.contrasena = contrasena;
 	}
 
 	@Override
@@ -55,12 +59,6 @@ public class Usuario {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-	
-	public boolean comprobarListaUsuarios(List<Usuario> listaUsuarios) {
-		boolean comprobado=false;
-		return comprobado;
-		
-	}
 
 	public String getDni() {
 		return dni;
@@ -70,5 +68,5 @@ public class Usuario {
 		this.dni = dni;
 	}
 	
-	
+
 }
