@@ -31,8 +31,6 @@ public class Cliente {
 
 		//BufferedReader in = new BufferedReader (new InputStreamReader(System.in)); 
 
-
-
 		objetoSalida = new ObjectOutputStream(cliente.getOutputStream());
 		objetoEntrada = new ObjectInputStream(cliente.getInputStream());
 
@@ -63,8 +61,6 @@ public class Cliente {
 					
 					
 				}
-				//System.out.print("Introduce cadena: "); 
-				//cadena = in.readLine();
 				if(cadena.equals("exit")) {
 					objeto = cadena;
 				}

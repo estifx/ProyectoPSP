@@ -13,6 +13,27 @@ public class Operaciones {
 	public static final String NOMBRE_BASE_DATOS = "data\\cuentasBancarias.db";
 	public static final String NOMBRE_CONEXION ="jdbc:sqlite:" + NOMBRE_BASE_DATOS;
 
+	public static int ejecutarModificacion(String sentenciaInsertar)
+			throws SQLException, ClassNotFoundException{
+		Connection conexion = null;
+		int filasModificadas=0;
+		try {
+			Class.forName(NOMBRE_DRIVER);
+			SQLiteConfig config = new SQLiteConfig();
+			config.enforceForeignKeys(true);
+			conexion = DriverManager.getConnection(NOMBRE_CONEXION,
+					config.toProperties());
+			Statement sentencia = conexion.createStatement();
+			filasModificadas= sentencia.executeUpdate(sentenciaInsertar);
+		}
+		finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}
+		return filasModificadas;
+	}
+
 
 	//comprobar usuario en BD
 	public static boolean comprobarUsuario(Usuario usuario)
@@ -71,27 +92,7 @@ public class Operaciones {
 			 creado = true;
 		} 
 	}
-	public static int ejecutarModificacion(String sentenciaInsertar)
-			throws SQLException, ClassNotFoundException{
-		Connection conexion = null;
-		int filasModificadas=0;
-		try {
-			Class.forName(NOMBRE_DRIVER);
-			SQLiteConfig config = new SQLiteConfig();
-			config.enforceForeignKeys(true);
-			conexion = DriverManager.getConnection(NOMBRE_CONEXION,
-					config.toProperties());
-			Statement sentencia = conexion.createStatement();
-			filasModificadas= sentencia.executeUpdate(sentenciaInsertar);
-		}
-		finally {
-			if (conexion != null) {
-				conexion.close();
-			}
-		}
-		return filasModificadas;
-	}
-
+	
 	public static boolean insertarUsuario(Usuario usuario)
 			throws SQLException, ClassNotFoundException {
 		boolean insertado = false;
