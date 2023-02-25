@@ -43,7 +43,7 @@ public class Operaciones {
 		String dni;
 		String email = usuario.getEmail();
 		String contrasena = usuario.getContrasena();
-		
+
 		try {
 			Class.forName(NOMBRE_DRIVER);
 			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
@@ -92,38 +92,44 @@ public class Operaciones {
 				conexion.close();
 			}
 		}		
-		
+
 		return cuenta;
 	}
-	
+
 	//ConsultarSaldo hecho
-	
+
 	public static double consultarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
-        int numCuenta;
-        double saldoActual=0;
-        numCuenta = cuenta.getNumCuenta();
-        Connection conexion=null;
+		int numCuenta;
+		double saldoActual=0;
+		numCuenta = cuenta.getNumCuenta();
+		Connection conexion=null;
+		try {
+			Class.forName(NOMBRE_DRIVER);
+			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
+			String sentenciaConsultarSaldo = "SELECT saldo from Cuenta WHERE  num_cuenta = "+ numCuenta;
+			Statement statement = conexion.createStatement();
+			ResultSet resultado = statement.executeQuery(sentenciaConsultarSaldo);
+			if(resultado.next()) {
+				saldoActual = resultado.getDouble("saldo");
+			}
+		}
+		finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}		
+		return saldoActual;
+	}
 
-        String sentenciaConsultarSaldo = "SELECT saldo from Cuenta WHERE  num_cuenta = "+ numCuenta;
 
-        Statement statement = conexion.createStatement();
-        ResultSet resultado = statement.executeQuery(sentenciaConsultarSaldo);
-        if(resultado.next()) {
-            saldoActual = resultado.getDouble("saldo");
-        }
-        return saldoActual;
-
-    }
-	
-	
 	public static boolean ingresarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
 		boolean transferido=false;
 		double saldo;
 		int filasInsertadas= 0,numCuenta;
-		
+
 		numCuenta = cuenta.getNumCuenta();
 		saldo = cuenta.getSaldo();
-		
+
 		String sentenciaModificar = "UPDATE cuenta SET saldo = "+ saldo + " WHERE num_cuenta = "+ numCuenta;
 		filasInsertadas = ejecutarModificacion(sentenciaModificar);
 		if(filasInsertadas == 1) {
@@ -131,20 +137,20 @@ public class Operaciones {
 		}
 		return transferido;
 	}
-	
+
 	//Insertar usuarios en BD para pruebas
-	
+
 	public static void crearUsuario() throws ClassNotFoundException, SQLException {
 		Usuario usuario=null;
 		boolean creado = false;
-		 String nombre, contrasena, email, telefono, dni;
-		 
+		String nombre, contrasena, email, telefono, dni;
+
 		usuario = new Usuario ("H12742538","Alejandro Martínez","alemartinez@gmail.com", "Alem", "636874241");
 		if(insertarUsuario(usuario)) {
-			 creado = true;
+			creado = true;
 		} 
 	}
-	
+
 	public static boolean insertarUsuario(Usuario usuario)
 			throws SQLException, ClassNotFoundException {
 		boolean insertado = false;
@@ -162,32 +168,32 @@ public class Operaciones {
 		}
 		return insertado;
 	}
-	
-	
-	
+
+
+
 	//transferencia hecha
-	
-	
-	 public static boolean Transferencia (Transferencia trans) throws ClassNotFoundException, SQLException {
-		 boolean transferido =false;
-			 if ((!CuentaOrigen(trans.getCuentaOrigen(),trans.getCantidadATransferir()))
+
+
+	public static boolean Transferencia (Transferencia trans) throws ClassNotFoundException, SQLException {
+		boolean transferido =false;
+		if ((!CuentaOrigen(trans.getCuentaOrigen(),trans.getCantidadATransferir()))
 				&& (!CuentaDestino(trans.getCuentaOrigen(),trans.getCantidadATransferir())) ) 
-			 {
-				transferido =true;
-			} 
-			 
-		 return transferido;
-		 
-	 }
-	 
-	 
-	 public static boolean CuentaOrigen (Cuenta  cuentaorigen , double dinero) throws SQLException, ClassNotFoundException {
-		 boolean descontado =false;
-		 Connection conexion = null;
+		{
+			transferido =true;
+		} 
+
+		return transferido;
+
+	}
+
+
+	public static boolean CuentaOrigen (Cuenta  cuentaorigen , double dinero) throws SQLException, ClassNotFoundException {
+		boolean descontado =false;
+		Connection conexion = null;
 		double saldodescontado  = 0;
 		int filasInsertadas=0;
-		 try {
-			 Class.forName(NOMBRE_DRIVER);
+		try {
+			Class.forName(NOMBRE_DRIVER);
 			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
 			if (cuentaorigen.getSaldo()>0) {
 				saldodescontado = cuentaorigen.getSaldo()- dinero;
@@ -196,52 +202,52 @@ public class Operaciones {
 				if(filasInsertadas == 1) {
 					descontado=true;
 				}
-				
-				
+
+
 			} 
-				
+
 		} finally {
 			if (conexion != null) {
 				conexion.close();
 			}
 		}
-		 
-		 
-		 return descontado;
-		 
-	 }
-	 
-	 
-	 public static boolean CuentaDestino (Cuenta cuentadestino , double dinero) throws SQLException, ClassNotFoundException {
-		 boolean ingresado = false;
-		 Connection conexion = null;
-			double saldoIngresado= 0;
-			int filasInsertadas  =0;
-			 try {
-				 Class.forName(NOMBRE_DRIVER);
-				conexion = DriverManager.getConnection(NOMBRE_CONEXION);
-				if (cuentadestino.getSaldo()>0) {
-					saldoIngresado = cuentadestino.getSaldo()+dinero;
-					String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentadestino.getNumCuenta();
-					filasInsertadas = ejecutarModificacion(sentenciaModificada);
-					if(filasInsertadas == 1) {
-						ingresado=true;
-					}
-				} 
-					
-			} finally {
-				if (conexion != null) {
-					conexion.close();
+
+
+		return descontado;
+
+	}
+
+
+	public static boolean CuentaDestino (Cuenta cuentadestino , double dinero) throws SQLException, ClassNotFoundException {
+		boolean ingresado = false;
+		Connection conexion = null;
+		double saldoIngresado= 0;
+		int filasInsertadas  =0;
+		try {
+			Class.forName(NOMBRE_DRIVER);
+			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
+			if (cuentadestino.getSaldo()>0) {
+				saldoIngresado = cuentadestino.getSaldo()+dinero;
+				String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentadestino.getNumCuenta();
+				filasInsertadas = ejecutarModificacion(sentenciaModificada);
+				if(filasInsertadas == 1) {
+					ingresado=true;
 				}
+			} 
+
+		} finally {
+			if (conexion != null) {
+				conexion.close();
 			}
-			 
-		 return ingresado;
-	 }
-	
-	
-	
-	
-	
-	
+		}
+
+		return ingresado;
+	}
+
+
+
+
+
+
 
 }

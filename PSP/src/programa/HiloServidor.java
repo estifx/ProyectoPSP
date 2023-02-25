@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class HiloServidor extends Thread{
 
@@ -79,7 +78,15 @@ public class HiloServidor extends Thread{
 		}
 		else if(objeto instanceof Cuenta) {
 			cuenta = (Cuenta) objeto;
-			objetoNuevo= ingresarEnCuenta(cuenta);
+			double saldo = cuenta.getSaldo();
+			
+			usuario =  cuenta.getUsuario();
+			if(saldo != 0) {
+				objetoNuevo= ingresarEnCuenta(cuenta);	
+			}
+			else {
+				objetoNuevo= consultarSaldoCuenta(cuenta);	
+			}
 		}
 		return objetoNuevo;
 	}
@@ -128,4 +135,11 @@ public class HiloServidor extends Thread{
 		return objeto;
 	}
 
+	public synchronized Object consultarSaldoCuenta(Cuenta cuenta) throws ClassNotFoundException, SQLException {
+		Object objeto = null;
+		String saldoActualizado ="";
+		saldoActualizado = String.valueOf(Operaciones.consultarSaldo(cuenta));
+		objeto = saldoActualizado;
+		return objeto;
+	}
 }

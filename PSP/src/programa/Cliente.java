@@ -8,11 +8,15 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 import entrada.Teclado;
+import gui.Login;
 
 public class Cliente {
 	public static boolean comprobar=false;
 	public static Usuario usuarioGuardado;
 	public static Cuenta cuentaGuardada;
+	public static String email,contrasena;
+	public static Login login;
+	public static boolean ventanaCerrada= false;
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		System.setProperty("javax.net.ssl.trustStore", "./Certificados SSL/AlmacenClienteSSL"); 
@@ -26,7 +30,7 @@ public class Cliente {
 		SSLSocket cliente = (SSLSocket) sfact.createSocket(host, puerto);
 		
 		Usuario usuario;
-		
+	
 		Transferencia transferencia=null;
 		Object objeto = null;
 		
@@ -55,6 +59,9 @@ public class Cliente {
 					else if(mensaje.equals("ingresado")) {
 						System.out.println("****Ingreso realizado con éxito****");
 					}
+					else {
+						System.out.println(mensaje);
+					}
 				}
 				else if(objeto instanceof Cuenta) {
 					sesionAbierta((Cuenta)objeto);
@@ -81,6 +88,7 @@ public class Cliente {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("*************Cliente Finalizado*************");
 		objetoEntrada.close();
 		objetoSalida.close();
 		cliente.close();
@@ -94,17 +102,22 @@ public class Cliente {
 		Usuario usuario;
 		
 		Cuenta cuenta;
-		String email, contrasena, cadena;
+		String cadena;
 		int numCuenta=0, opcion;
 		double saldo, cantidad;
 
 		if(!comprobar) {
+			//login = new Login();
+			//login.setVisible(true);
 			System.out.println("Iniciar sesión");
 			email = Teclado.leerCadena("Email: ");
 			contrasena = Teclado.leerCadena("Contraseña: ");
 			usuario = new Usuario(email, contrasena);
 			objeto = usuario;
 			usuarioGuardado= usuario;
+		}
+		else if(login.cerrar) {
+			objeto ="exit";
 		}
 		else {
 			//desde buffered hasta cadena se debe sustituir por el botón seleccionado del menú de usuarios
@@ -117,7 +130,9 @@ public class Cliente {
 				objeto = cuenta;
 			}
 			else if(opcion == 2) {
-				
+				numCuenta = cuentaGuardada.getNumCuenta();
+				cuenta = new Cuenta(numCuenta);
+				objeto = cuenta;
 			}
 			else if(opcion == 3) {
 				cantidad= Teclado.leerReal("Indica cantidad a transferir:");
@@ -143,7 +158,6 @@ public class Cliente {
 	}
 	public static void transferenciaRealizada(Transferencia transferencia) {
 		Cuenta cuentaOrigen = null, cuentaDestino= null;
-		int numCuentaOrigen, numCuentaDestino;
 		double cantidad;
 		if(transferencia != null) {
 			System.out.println("Transferencia realizada con éxito.");
@@ -162,6 +176,10 @@ public class Cliente {
 	}
 	public static void consultarSaldoCuenta(Cuenta cuenta) {
 		
+	}
+	
+	public static void ventanaCerrada() {
+		ventanaCerrada = true;
 	}
 	
 	public static void visualizarMenuOpciones() {

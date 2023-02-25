@@ -26,6 +26,9 @@ public class Cuenta implements Serializable {
 		this.saldo = saldo;
 	}
 
+	public Cuenta(int numCuenta) {
+		this.numCuenta = numCuenta;
+	}
 	@Override
 	public String toString() {
 		return "Cuenta \n [# de Cuenta:" + numCuenta + ", Saldo: " + saldo + ", Usuario:" 
