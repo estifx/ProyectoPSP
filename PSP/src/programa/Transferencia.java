@@ -21,7 +21,7 @@ public class Transferencia {
 		this.cuentaDestino = cuentaDestino;
 		this.cantidadATransferir = cantidadATransferir;
 	}
-	public Transferencia(Usuario usuario, int numCuenta, double cantidadATransferir) {
+	public Transferencia(int numCuenta, double cantidadATransferir) {
 		this.usuario = usuario;
 		this.numCuenta = numCuenta;
 		this.cantidadATransferir = cantidadATransferir;

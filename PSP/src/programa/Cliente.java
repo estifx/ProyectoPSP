@@ -66,7 +66,11 @@ public class Cliente {
 						System.out.println("Ingreso realizado con éxito");
 					}
 				}
-				if(objeto instanceof Transferencia) {
+				else if(objeto instanceof Cuenta) {
+					
+				}
+				
+				else if(objeto instanceof Transferencia) {
 					transferencia=(Transferencia) objeto;
 					
 					
@@ -121,10 +125,8 @@ public class Cliente {
 				 */
 			}
 			else if(opcion == 2) {
-				System.out.println("Indica la cuenta a la que deseas realizar la transferencia:");
-				numCuenta= Teclado.leerEntero("Indica número de cuenta?");
 				cantidad= Teclado.leerReal("Indica cantidad a transferir:");
-				transferencia = new Transferencia(usuarioGuardado,numCuenta,cantidad);
+				transferencia = new Transferencia(numCuenta,cantidad);
 				transferenciaRealizada(transferencia);
 			}
 			else if(opcion == 3) {
@@ -143,6 +145,9 @@ public class Cliente {
 		}
 	}
 	
+	public static void ingresarSaldo(Cuenta cuenta) {
+		
+	}
 	public static void transferenciaRealizada(Transferencia transferencia) {
 		Cuenta cuentaOrigen = null, cuentaDestino= null;
 		int numCuentaOrigen, numCuentaDestino;

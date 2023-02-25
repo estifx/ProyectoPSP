@@ -15,6 +15,12 @@ public class Cuenta implements Serializable {
 		this.usuario = usuario;
 		this.movCuenta = movCuenta;
 	}
+	public Cuenta(int numCuenta, double saldo, Usuario usuario) {
+		this.numCuenta = numCuenta;
+		this.saldo = saldo;
+		this.usuario = usuario;
+		this.movCuenta = movCuenta;
+	}
 	public Cuenta(int numCuenta, double saldo) {
 		this.numCuenta = numCuenta;
 		this.saldo = saldo;

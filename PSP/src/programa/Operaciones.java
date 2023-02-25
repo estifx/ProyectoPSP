@@ -38,7 +38,6 @@ public class Operaciones {
 	//comprobar usuario en BD
 	public static Cuenta comprobarUsuario(Usuario usuario)
 			throws ClassNotFoundException, SQLException {
-		boolean existeUsuario=false;
 		Connection conexion = null;
 		Cuenta cuenta= null;
 		String email = usuario.getEmail();
@@ -65,7 +64,36 @@ public class Operaciones {
 		}		
 		return cuenta;
 	}
-	
+	public static Cuenta consultarCuentaXdni(int dni) throws ClassNotFoundException, SQLException {
+		Connection conexion = null;
+		Cuenta cuenta;
+		Usuario usuario;
+		double saldo;
+		int numCuenta;
+		try {
+			Class.forName(NOMBRE_DRIVER);
+			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
+			String sentenciaConsultar = "SELECT * FROM cuenta "+
+					"WHERE dni = '" + dni + "'";
+			Statement sentencia = conexion.createStatement();
+			ResultSet resultados = sentencia.executeQuery(sentenciaConsultar);	
+			if(resultados.next()) {
+				numCuenta = resultados.getInt("num_cuenta");
+				saldo = resultados.getDouble("saldo");
+				//usuario = (resultados.getString("dni"));
+				cuenta = new Cuenta(numCuenta, saldo, usuario);
+			}
+			resultados.close();
+			sentencia.close();
+		}
+		finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}		
+		
+		return cuenta;
+	}
 	
 	public static boolean ingresarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
 		boolean transferido=false;

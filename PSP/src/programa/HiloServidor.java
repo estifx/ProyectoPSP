@@ -36,6 +36,7 @@ public class HiloServidor extends Thread{
 						cadena = "exit";
 					}
 				}
+				//escribe a cliente
 				objSalida.writeObject(objetoNuevo);
 			}
 			catch (IOException e) {
@@ -85,10 +86,14 @@ public class HiloServidor extends Thread{
 	
 	public synchronized Object inicioSesion(Usuario usuario) throws ClassNotFoundException, SQLException {
 		Object objeto=null;
+		Usuario user;
+		Cuenta cuenta;
+		int numCuenta=0;
 		String mensaje;
-		if(Operaciones.comprobarUsuario(usuario)){
-			mensaje ="existe";
-			objeto= mensaje;
+		cuenta = Operaciones.comprobarUsuario(usuario);
+		numCuenta = cuenta.getNumCuenta();
+		if(numCuenta != 0){
+			objeto= cuenta;
 		}
 		else {
 			mensaje ="no existe";
@@ -96,6 +101,7 @@ public class HiloServidor extends Thread{
 		}
 		return objeto;
 	}
+	
 	public synchronized Object ingresarEnCuenta(Cuenta cuenta) throws ClassNotFoundException, SQLException {
 		Object objeto=null;
 		String mensaje;
