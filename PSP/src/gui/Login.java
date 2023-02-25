@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
 
@@ -71,6 +73,12 @@ public class Login extends JFrame {
 		contentPane.add(textField_1);
 		
 		JButton btnNewButton = new JButton("Iniciar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
 		btnNewButton.setBounds(175, 201, 85, 21);
 		contentPane.add(btnNewButton);
 	}

@@ -111,6 +111,7 @@ public class HiloServidor extends Thread{
 		}
 		return objeto;
 	}
+	/*
 	public synchronized Object transferirEntreCuentas() throws ClassNotFoundException, SQLException{
 		Object objeto = null;
 		String mensaje;
@@ -124,6 +125,6 @@ public class HiloServidor extends Thread{
 		}
 
 		return objeto;
-	}
+	}*/
 
 }

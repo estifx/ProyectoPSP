@@ -40,6 +40,7 @@ public class Operaciones {
 			throws ClassNotFoundException, SQLException {
 		Connection conexion = null;
 		Cuenta cuenta= null;
+		String dni;
 		String email = usuario.getEmail();
 		String contrasena = usuario.getContrasena();
 		
@@ -51,8 +52,8 @@ public class Operaciones {
 			Statement sentencia = conexion.createStatement();
 			ResultSet resultados = sentencia.executeQuery(sentenciaConsultar);	
 			if(resultados.next()) {
-				resultados.getInt("dni");
-				//buscar cuenta con el dni
+				dni= resultados.getString("dni");
+				cuenta= consultarCuentaXdni(dni);
 			}
 			resultados.close();
 			sentencia.close();
@@ -64,7 +65,7 @@ public class Operaciones {
 		}		
 		return cuenta;
 	}
-	public static Cuenta consultarCuentaXdni(int dni) throws ClassNotFoundException, SQLException {
+	public static Cuenta consultarCuentaXdni(String dni) throws ClassNotFoundException, SQLException {
 		Connection conexion = null;
 		Cuenta cuenta = null;
 		Usuario usuario;

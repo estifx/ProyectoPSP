@@ -51,15 +51,7 @@ public class Cliente {
 				objeto = (Object) objetoEntrada.readObject();
 				if(objeto instanceof String) {
 					mensaje = (String) objeto;
-					if(mensaje.equals("existe")) {
-						sesionAbierta(mensaje);
-						System.out.println("Sesión abierta");
-					}
-					else if(mensaje.equals("no existe")) {
-						System.out.println("****Email o contraseña incorrecta****");
-						System.out.println("");
-					}
-					else if(mensaje.equals("salir")) {
+					if(mensaje.equals("salir")) {
 						cadena = mensaje;
 					}
 					else if(mensaje.equals("ingresado")) {
@@ -67,14 +59,19 @@ public class Cliente {
 					}
 				}
 				else if(objeto instanceof Cuenta) {
-					
+					sesionAbierta((Cuenta)objeto);
+					if(comprobar) {
+						System.out.println("Sesión abierta");
+					}
+					else {
+						System.out.println("****Email o contraseña incorrecta****");
+						System.out.println("");
+					}
 				}
 				
 				else if(objeto instanceof Transferencia) {
 					transferencia=(Transferencia) objeto;
-					
-					
-					
+
 				}
 				if(cadena.equals("exit")) {
 					objeto = cadena;
@@ -99,7 +96,7 @@ public class Cliente {
 		
 		Cuenta cuenta;
 		String email, contrasena, cadena;
-		int numCuenta, opcion;
+		int numCuenta=0, opcion;
 		double saldo, cantidad;
 
 		if(!comprobar) {
@@ -139,8 +136,8 @@ public class Cliente {
 		return objeto;
 	}
 
-	public static void sesionAbierta(String mensaje) {
-		if(mensaje.equals("existe")) {
+	public static void sesionAbierta(Cuenta cuenta) {
+		if(cuenta != null) {
 			comprobar = true;
 		}
 	}
