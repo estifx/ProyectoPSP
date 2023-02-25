@@ -1,13 +1,13 @@
 package programa;
 
-public class TransferenciaCuentas {
+public class Transferencia {
 	private Usuario usuario;
 	private int numCuenta;
 	private Cuenta cuentaOrigen;
 	private Cuenta cuentaDestino;
 	private double cantidadATransferir;
 	
-	public TransferenciaCuentas(Usuario usuario, int numCuenta, Cuenta cuentaOrigen, Cuenta cuentaDestino,
+	public Transferencia(Usuario usuario, int numCuenta, Cuenta cuentaOrigen, Cuenta cuentaDestino,
 			double cantidadATransferir) {
 		this.usuario = usuario;
 		this.numCuenta = numCuenta;
@@ -16,12 +16,12 @@ public class TransferenciaCuentas {
 		this.cantidadATransferir = cantidadATransferir;
 	}
 	
-	public TransferenciaCuentas(Cuenta cuentaOrigen, Cuenta cuentaDestino,double cantidadATransferir) {
+	public Transferencia(Cuenta cuentaOrigen, Cuenta cuentaDestino,double cantidadATransferir) {
 		this.cuentaOrigen = cuentaOrigen;
 		this.cuentaDestino = cuentaDestino;
 		this.cantidadATransferir = cantidadATransferir;
 	}
-	public TransferenciaCuentas(Usuario usuario, int numCuenta, double cantidadATransferir) {
+	public Transferencia(Usuario usuario, int numCuenta, double cantidadATransferir) {
 		this.usuario = usuario;
 		this.numCuenta = numCuenta;
 		this.cantidadATransferir = cantidadATransferir;

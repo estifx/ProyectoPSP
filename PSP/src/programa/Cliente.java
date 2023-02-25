@@ -29,7 +29,7 @@ public class Cliente {
 		SSLSocket cliente = (SSLSocket) sfact.createSocket(host, puerto);
 		
 		Usuario usuario;
-		TransferenciaCuentas transferencia=null;
+		Transferencia transferencia=null;
 		Object objeto = null;
 		
 		//Objetos para comunicación con servidor
@@ -66,8 +66,8 @@ public class Cliente {
 						System.out.println("Ingreso realizado con éxito");
 					}
 				}
-				if(objeto instanceof TransferenciaCuentas) {
-					transferencia=(TransferenciaCuentas) objeto;
+				if(objeto instanceof Transferencia) {
+					transferencia=(Transferencia) objeto;
 					
 					
 					
@@ -90,7 +90,7 @@ public class Cliente {
 
 	public static Object menu() throws IOException {
 		Object objeto=null;
-		TransferenciaCuentas transferencia;
+		Transferencia transferencia;
 		Usuario usuario;
 		
 		Cuenta cuenta;
@@ -124,7 +124,7 @@ public class Cliente {
 				System.out.println("Indica la cuenta a la que deseas realizar la transferencia:");
 				numCuenta= Teclado.leerEntero("Indica número de cuenta?");
 				cantidad= Teclado.leerReal("Indica cantidad a transferir:");
-				transferencia = new TransferenciaCuentas(usuarioGuardado,numCuenta,cantidad);
+				transferencia = new Transferencia(usuarioGuardado,numCuenta,cantidad);
 				transferenciaRealizada(transferencia);
 			}
 			else if(opcion == 3) {
@@ -143,7 +143,7 @@ public class Cliente {
 		}
 	}
 	
-	public static void transferenciaRealizada(TransferenciaCuentas transferencia) {
+	public static void transferenciaRealizada(Transferencia transferencia) {
 		Cuenta cuentaOrigen = null, cuentaDestino= null;
 		int numCuentaOrigen, numCuentaDestino;
 		double cantidad;
