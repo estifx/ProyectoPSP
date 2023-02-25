@@ -96,6 +96,26 @@ public class Operaciones {
 		return cuenta;
 	}
 	
+	//ConsultarSaldo hecho
+	
+	public static double consultarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
+        int numCuenta;
+        double saldoActual=0;
+        numCuenta = cuenta.getNumCuenta();
+        Connection conexion=null;
+
+        String sentenciaConsultarSaldo = "SELECT saldo from Cuenta WHERE  num_cuenta = "+ numCuenta;
+
+        Statement statement = conexion.createStatement();
+        ResultSet resultado = statement.executeQuery(sentenciaConsultarSaldo);
+        if(resultado.next()) {
+            saldoActual = resultado.getDouble("saldo");
+        }
+        return saldoActual;
+
+    }
+	
+	
 	public static boolean ingresarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
 		boolean transferido=false;
 		double saldo;
@@ -143,7 +163,9 @@ public class Operaciones {
 		return insertado;
 	}
 	
-	//transferencia
+	
+	
+	//transferencia hecha
 	
 	
 	 public static boolean Transferencia (Transferencia trans) throws ClassNotFoundException, SQLException {
@@ -163,7 +185,7 @@ public class Operaciones {
 		 boolean descontado =false;
 		 Connection conexion = null;
 		double saldodescontado  = 0;
-		int filasInsertadas  =0;
+		int filasInsertadas=0;
 		 try {
 			 Class.forName(NOMBRE_DRIVER);
 			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
@@ -205,7 +227,6 @@ public class Operaciones {
 					if(filasInsertadas == 1) {
 						ingresado=true;
 					}
-					
 				} 
 					
 			} finally {
