@@ -148,21 +148,12 @@ public class Operaciones {
 	
 	 public static boolean Transferencia (Transferencia trans , Double cantidadAingresar) throws ClassNotFoundException, SQLException {
 		 boolean transferido =false;
-		 
-		 try {
 			 if ((!CuentaOrigen(trans.getCuentaOrigen(), cantidadAingresar))
 				&& (!CuentaDestino(trans.getCuentaOrigen(), cantidadAingresar)) ) 
 			 {
 				transferido =true;
-
 			} 
 			 
-			
-		} finally {
-			
-		}
-		 
-		
 		 return transferido;
 		 
 	 }
@@ -202,19 +193,18 @@ public class Operaciones {
 	 public static boolean CuentaDestino (Cuenta cuentadestino , double dinero) throws SQLException, ClassNotFoundException {
 		 boolean ingresado = false;
 		 Connection conexion = null;
-			double saldodescontado  = 0;
+			double saldoIngresado= 0;
 			int filasInsertadas  =0;
 			 try {
 				 Class.forName(NOMBRE_DRIVER);
 				conexion = DriverManager.getConnection(NOMBRE_CONEXION);
 				if (cuentadestino.getSaldo()>0) {
-					saldodescontado = cuentadestino.getSaldo()+dinero;
-					String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldodescontado + " WHERE num_cuenta = "+cuentadestino.getNumCuenta();
+					saldoIngresado = cuentadestino.getSaldo()+dinero;
+					String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentadestino.getNumCuenta();
 					filasInsertadas = ejecutarModificacion(sentenciaModificada);
 					if(filasInsertadas == 1) {
 						ingresado=true;
 					}
-					
 					
 				} 
 					

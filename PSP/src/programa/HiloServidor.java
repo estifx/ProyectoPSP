@@ -112,11 +112,11 @@ public class HiloServidor extends Thread{
 		}
 		return objeto;
 	}
-	/*
-	public synchronized Object transferirEntreCuentas() throws ClassNotFoundException, SQLException{
+	
+	public synchronized Object transferirEntreCuentas(Transferencia transferencia , double dineroTransferido) throws ClassNotFoundException, SQLException{
 		Object objeto = null;
 		String mensaje;
-		if(Operaciones.comprobarUsuario(null)) {
+		if(Operaciones.Transferencia(transferencia, dineroTransferido)) {
 			mensaje="transferencia realizada";
 			objeto= mensaje;
 		}
@@ -126,6 +126,6 @@ public class HiloServidor extends Thread{
 		}
 
 		return objeto;
-	}*/
+	}
 
 }
