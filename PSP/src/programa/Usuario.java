@@ -9,9 +9,6 @@ public class Usuario implements Serializable{
 	private String telefono;
 	private String dni;
 	
-	
-	
-	
 	public Usuario(String dni) {
 		
 		this.dni = dni;

@@ -65,6 +65,7 @@ public class HiloServidor extends Thread{
 		Object objetoNuevo = null;
 		Usuario usuario;
 		Cuenta cuenta;
+		Transferencia transferencia;
 
 		if(objeto instanceof Usuario) {
 			usuario = (Usuario)objeto;
@@ -88,12 +89,15 @@ public class HiloServidor extends Thread{
 				objetoNuevo= consultarSaldoCuenta(cuenta);	
 			}
 		}
+		else if(objeto instanceof Transferencia) {
+			transferencia =(Transferencia) objeto;
+			objetoNuevo=(Object) transferirEntreCuentas(transferencia);
+		}
 		return objetoNuevo;
 	}
 	
 	public synchronized Object inicioSesion(Usuario usuario) throws ClassNotFoundException, SQLException {
 		Object objeto=null;
-		Usuario user;
 		Cuenta cuenta;
 		int numCuenta=0;
 		String mensaje;
@@ -119,22 +123,12 @@ public class HiloServidor extends Thread{
 		}
 		return objeto;
 	}
-	
-	public synchronized Object transferirEntreCuentas(Transferencia transferencia ) throws ClassNotFoundException, SQLException{
-		Object objeto = null;
-		String mensaje;
-		if(Operaciones.Transferencia(transferencia)) {
-			mensaje="transferencia realizada";
-			objeto= mensaje;
-		}
-		else {
-			mensaje ="saldo insuficiente";
-			objeto= mensaje;
-		}
-
+	public synchronized Object transferirEntreCuentas(Transferencia trans)throws ClassNotFoundException, SQLException {
+		Object objeto= null;
+		objeto = Operaciones.transferencia(trans);
 		return objeto;
 	}
-
+	
 	public synchronized Object consultarSaldoCuenta(Cuenta cuenta) throws ClassNotFoundException, SQLException {
 		Object objeto = null;
 		String saldoActualizado ="";
@@ -142,4 +136,5 @@ public class HiloServidor extends Thread{
 		objeto = saldoActualizado;
 		return objeto;
 	}
+	
 }

@@ -31,7 +31,7 @@ public class Cliente {
 		
 		Usuario usuario;
 	
-		Transferencia transferencia=null;
+		Transferencia transferencia;
 		Object objeto = null;
 		
 		//Objetos para comunicación con servidor
@@ -77,7 +77,7 @@ public class Cliente {
 				
 				else if(objeto instanceof Transferencia) {
 					transferencia=(Transferencia) objeto;
-
+					transferenciaRealizada(transferencia);
 				}
 				if(cadena.equals("exit")) {
 					objeto = cadena;
@@ -135,13 +135,13 @@ public class Cliente {
 				objeto = cuenta;
 			}
 			else if(opcion == 3) {
-				numCuentaDestino =Teclado.leerEntero("Indica cuenta a la que deseas realizar la transferencia:");
+				numCuentaDestino =Teclado.leerEntero("Indica la cuenta a la que deseas realizar la transferencia: ");
 				cantidad= Teclado.leerReal("Indica cantidad a transferir:");
 				numCuenta = cuentaGuardada.getNumCuenta();
 				Cuenta cuentaOrigen = new Cuenta(numCuenta);
 				Cuenta cuentaDestino = new Cuenta(numCuentaDestino);
 				transferencia = new Transferencia(cuentaOrigen, cuentaDestino,cantidad);
-				transferenciaRealizada(transferencia);
+				objeto= transferencia;
 			}
 			else if(opcion == 0) {
 				objeto ="exit";
@@ -156,10 +156,6 @@ public class Cliente {
 		}
 	}
 	
-	public static void ingresarSaldo(Cuenta cuenta) {
-		
-		
-	}
 	public static void transferenciaRealizada(Transferencia transferencia) {
 		Cuenta cuentaOrigen = null, cuentaDestino= null;
 		double cantidad;
@@ -170,8 +166,9 @@ public class Cliente {
 			cantidad= transferencia.getCantidadATransferir();
 			System.out.println("Se ha realizado una transferencia de la cuenta # "
 					+ cuentaOrigen.getNumCuenta()+ " a la cuenta # "
-					+ cuentaDestino.getNumCuenta() + " la cantidad de: "
+					+ cuentaDestino.getNumCuenta() + " por la cantidad de: "
 					+ cantidad);
+			cuentaGuardada= cuentaOrigen;
 		}
 		else {
 			System.out.println("No se puede realizar la transferencia. Saldo insuficiente o cuenta destino incorrecta");

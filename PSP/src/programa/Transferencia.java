@@ -1,6 +1,8 @@
 package programa;
 
-public class Transferencia {
+import java.io.Serializable;
+
+public class Transferencia implements Serializable{
 	private Usuario usuario;
 	private int numCuenta;
 	private Cuenta cuentaOrigen;
@@ -27,7 +29,10 @@ public class Transferencia {
 		this.cantidadATransferir = cantidadATransferir;
 	}
 	
-	
+	public Transferencia(Cuenta cuentaOrigen, Cuenta cuentaDestino) {
+		this.cuentaOrigen = cuentaOrigen;
+		this.cuentaDestino = cuentaDestino;
+	}
 	@Override
 	public String toString() {
 		return "TransferenciaCuentas [usuario=" + usuario + ", numCuenta=" + numCuenta + ", cuentaOrigen="
@@ -59,7 +64,5 @@ public class Transferencia {
 	public void setCantidadATransferir(double cantidadATransferir) {
 		this.cantidadATransferir = cantidadATransferir;
 	}
-	
-	
 
 }

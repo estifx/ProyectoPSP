@@ -124,12 +124,12 @@ public class Operaciones {
 
 	public static boolean ingresarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
 		boolean transferido=false;
-		double saldo;
+		double saldo, saldoAntiguo;
 		int filasInsertadas= 0,numCuenta;
 
 		numCuenta = cuenta.getNumCuenta();
-		saldo = cuenta.getSaldo();
-
+		saldoAntiguo= consultarSaldo(cuenta);
+		saldo = cuenta.getSaldo() + saldoAntiguo;
 		String sentenciaModificar = "UPDATE cuenta SET saldo = "+ saldo + " WHERE num_cuenta = "+ numCuenta;
 		filasInsertadas = ejecutarModificacion(sentenciaModificar);
 		if(filasInsertadas == 1) {
@@ -169,35 +169,36 @@ public class Operaciones {
 		return insertado;
 	}
 
-
-
 	//transferencia hecha
 
 
-	public static boolean Transferencia (Transferencia trans) throws ClassNotFoundException, SQLException {
-		boolean transferido =false;
-		if ((!CuentaOrigen(trans.getCuentaOrigen(),trans.getCantidadATransferir()))
-				&& (!CuentaDestino(trans.getCuentaOrigen(),trans.getCantidadATransferir())) ) 
-		{
-			transferido =true;
+	public static Transferencia transferencia (Transferencia trans) throws ClassNotFoundException, SQLException {
+		Transferencia transferencia= null;
+		Cuenta nuevaCuentaO,nuevaCuentaD;
+
+		if ((cuentaOrigen(trans.getCuentaOrigen(),trans.getCantidadATransferir()))
+				&& (cuentaDestino(trans.getCuentaDestino(),trans.getCantidadATransferir())) ) {
+			nuevaCuentaO= buscarPorNumCuenta(trans.getCuentaOrigen());
+			nuevaCuentaD= buscarPorNumCuenta(trans.getCuentaDestino());
+			transferencia = new Transferencia(nuevaCuentaO,nuevaCuentaD);
 		} 
-
-		return transferido;
-
+		return transferencia;
 	}
 
 
-	public static boolean CuentaOrigen(Cuenta  cuentaorigen , double dinero) throws SQLException, ClassNotFoundException {
+	public static boolean cuentaOrigen(Cuenta  cuentaorigen , double dinero) throws SQLException, ClassNotFoundException {
 		boolean descontado =false;
 		Connection conexion = null;
+		Cuenta cuentAux;
 		double saldodescontado  = 0;
 		int filasInsertadas=0;
 		try {
 			Class.forName(NOMBRE_DRIVER);
 			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
-			if (cuentaorigen.getSaldo()>0) {
-				saldodescontado = cuentaorigen.getSaldo()- dinero;
-				String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldodescontado + " WHERE num_cuenta = "+cuentaorigen.getNumCuenta();
+			cuentAux= buscarPorNumCuenta(cuentaorigen);
+			if (cuentAux.getSaldo()>0) {
+				saldodescontado = cuentAux.getSaldo()- dinero;
+				String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldodescontado + " WHERE num_cuenta = "+cuentAux.getNumCuenta();
 				filasInsertadas = ejecutarModificacion(sentenciaModificada);
 				if(filasInsertadas == 1) {
 					descontado=true;
@@ -214,7 +215,7 @@ public class Operaciones {
 	}
 
 
-	public static boolean CuentaDestino (Cuenta cuentadestino , double dinero) throws SQLException, ClassNotFoundException {
+	public static boolean cuentaDestino(Cuenta cuentadestino , double dinero) throws SQLException, ClassNotFoundException {
 		boolean ingresado = false;
 		Connection conexion = null;
 		double saldoIngresado= 0;
@@ -222,15 +223,12 @@ public class Operaciones {
 		try {
 			Class.forName(NOMBRE_DRIVER);
 			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
-			if (cuentadestino.getSaldo()>0) {
-				saldoIngresado = cuentadestino.getSaldo()+dinero;
-				String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentadestino.getNumCuenta();
-				filasInsertadas = ejecutarModificacion(sentenciaModificada);
-				if(filasInsertadas == 1) {
-					ingresado=true;
-				}
-			} 
-
+			saldoIngresado = cuentadestino.getSaldo()+dinero;
+			String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentadestino.getNumCuenta();
+			filasInsertadas = ejecutarModificacion(sentenciaModificada);
+			if(filasInsertadas == 1) {
+				ingresado=true;
+			}
 		} finally {
 			if (conexion != null) {
 				conexion.close();
@@ -240,7 +238,34 @@ public class Operaciones {
 		return ingresado;
 	}
 
+	public static Cuenta buscarPorNumCuenta(Cuenta cuenta) throws SQLException, ClassNotFoundException {
+		Connection conexion=null;
+		Cuenta nuevaCuenta = null;
+		int numCuenta;
+		double saldoActual=0;
+		Usuario usuario;
+		numCuenta = cuenta.getNumCuenta();
 
+		try {
+			Class.forName(NOMBRE_DRIVER);
+			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
+			String sentenciaConsultarSaldo = "SELECT * from Cuenta WHERE  num_cuenta = "+ numCuenta;
+			Statement statement = conexion.createStatement();
+			ResultSet resultado = statement.executeQuery(sentenciaConsultarSaldo);
+			if(resultado.next()) {
+				saldoActual = resultado.getDouble("saldo");
+				numCuenta = resultado.getInt("num_cuenta");
+				usuario = new Usuario(resultado.getString("dni_usuario"));
+				nuevaCuenta = new Cuenta(numCuenta, saldoActual, usuario);
+			}
+		}
+		finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}		
+		return nuevaCuenta;
+	}
 
 
 
