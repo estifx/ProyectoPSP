@@ -136,7 +136,10 @@ public class Cliente {
 			}
 			else if(opcion == 3) {
 				cantidad= Teclado.leerReal("Indica cantidad a transferir:");
-				transferencia = new Transferencia(numCuenta,cantidad);
+				numCuenta = cuentaGuardada.getNumCuenta();
+				Cuenta cuentaOrigen = new Cuenta(numCuenta);
+				Cuenta cuentaDestino = new Cuenta(numCuenta);
+				transferencia = new Transferencia(cuentaOrigen, cuentaDestino,cantidad);
 				transferenciaRealizada(transferencia);
 			}
 			else if(opcion == 0) {

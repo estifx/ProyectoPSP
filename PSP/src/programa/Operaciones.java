@@ -187,7 +187,7 @@ public class Operaciones {
 	}
 
 
-	public static boolean CuentaOrigen (Cuenta  cuentaorigen , double dinero) throws SQLException, ClassNotFoundException {
+	public static boolean CuentaOrigen(Cuenta  cuentaorigen , double dinero) throws SQLException, ClassNotFoundException {
 		boolean descontado =false;
 		Connection conexion = null;
 		double saldodescontado  = 0;
@@ -202,8 +202,6 @@ public class Operaciones {
 				if(filasInsertadas == 1) {
 					descontado=true;
 				}
-
-
 			} 
 
 		} finally {
@@ -212,9 +210,7 @@ public class Operaciones {
 			}
 		}
 
-
 		return descontado;
-
 	}
 
 
