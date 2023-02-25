@@ -174,9 +174,6 @@ public class Cliente {
 		}
 
 	}
-	public static void consultarSaldoCuenta(Cuenta cuenta) {
-		
-	}
 	
 	public static void ventanaCerrada() {
 		ventanaCerrada = true;
