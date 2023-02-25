@@ -53,7 +53,7 @@ public class HiloServidor extends Thread{
 		try {
 			objEntrada.close();
 			objSalida.close(); 
-		cliente.close();
+			cliente.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
