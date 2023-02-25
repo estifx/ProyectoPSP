@@ -162,6 +162,9 @@ public class Cliente {
 		}
 
 	}
+	public static void consultarSaldoCuenta(Cuenta cuenta) {
+		
+	}
 	
 	public static void visualizarMenuOpciones() {
 		System.out.println("*************************************************************");

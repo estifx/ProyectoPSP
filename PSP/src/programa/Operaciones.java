@@ -36,10 +36,11 @@ public class Operaciones {
 
 
 	//comprobar usuario en BD
-	public static boolean comprobarUsuario(Usuario usuario)
+	public static Cuenta comprobarUsuario(Usuario usuario)
 			throws ClassNotFoundException, SQLException {
 		boolean existeUsuario=false;
 		Connection conexion = null;
+		Cuenta cuenta= null;
 		String email = usuario.getEmail();
 		String contrasena = usuario.getContrasena();
 		
@@ -51,7 +52,8 @@ public class Operaciones {
 			Statement sentencia = conexion.createStatement();
 			ResultSet resultados = sentencia.executeQuery(sentenciaConsultar);	
 			if(resultados.next()) {
-				existeUsuario=true;
+				resultados.getInt("dni");
+				//buscar cuenta con el dni
 			}
 			resultados.close();
 			sentencia.close();
@@ -61,8 +63,9 @@ public class Operaciones {
 				conexion.close();
 			}
 		}		
-		return existeUsuario;
+		return cuenta;
 	}
+	
 	
 	public static boolean ingresarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
 		boolean transferido=false;
