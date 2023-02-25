@@ -90,6 +90,10 @@ public class HiloServidor extends Thread{
 			mensaje ="existe";
 			objeto= mensaje;
 		}
+		else {
+			mensaje ="no existe";
+			objeto= mensaje;
+		}
 		return objeto;
 	}
 	public synchronized Object ingresarEnCuenta(Cuenta cuenta) throws ClassNotFoundException, SQLException {
@@ -99,6 +103,11 @@ public class HiloServidor extends Thread{
 			mensaje ="ingresado";
 			objeto= mensaje;
 		}
+		return objeto;
+	}
+	public synchronized Object transferirEntreCuentas() throws ClassNotFoundException, SQLException{
+		Object objeto = null;
+		
 		return objeto;
 	}
 

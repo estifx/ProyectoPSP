@@ -10,25 +10,23 @@ import javax.net.ssl.SSLSocket;
 
 public class Servidor {
 
-public static void main(String[] args) {
-		
+	public static void main(String[] args) {
+
 		System.setProperty("javax.net.ssl.keyStore", "./Certificados SSL/AlmacenServidorSSL"); 
 		System.setProperty("javax.net.ssl.keyStorePassword", "951357"); 
-		
+
 		int puerto= 60000;
 
 		try {
-			
+
 			SSLServerSocketFactory serverSSL = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault(); 
 			SSLServerSocket servidor = (SSLServerSocket) serverSSL.createServerSocket(puerto);
 			SSLSocket cliente = null;
-			
+
 			while (true) { 
 				System.out.println("--------  Servidor -----------");
 				System.out.println("Servidor iniciado...\n");
 				System.out.println("Esperando Cliente...\n");
-
-				
 
 				// Espera Cliente
 				cliente = (SSLSocket)servidor.accept();//esperando cliente
