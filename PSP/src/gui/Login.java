@@ -67,7 +67,7 @@ public class Login extends JFrame {
 					cerrar = true;
 					
 					
-						System.exit(0);
+					System.exit(0);
 			
 
 				}

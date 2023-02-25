@@ -166,8 +166,7 @@ public class Cliente {
 			cantidad= transferencia.getCantidadATransferir();
 			System.out.println("Se ha realizado una transferencia de la cuenta # "
 					+ cuentaOrigen.getNumCuenta()+ " a la cuenta # "
-					+ cuentaDestino.getNumCuenta() + " por la cantidad de: "
-					+ cantidad);
+					+ cuentaDestino.getNumCuenta());
 			cuentaGuardada= cuentaOrigen;
 		}
 		else {
