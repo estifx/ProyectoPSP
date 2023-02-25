@@ -218,13 +218,15 @@ public class Operaciones {
 	public static boolean cuentaDestino(Cuenta cuentadestino , double dinero) throws SQLException, ClassNotFoundException {
 		boolean ingresado = false;
 		Connection conexion = null;
+		Cuenta cuentAux;
 		double saldoIngresado= 0;
 		int filasInsertadas  =0;
 		try {
 			Class.forName(NOMBRE_DRIVER);
 			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
-			saldoIngresado = cuentadestino.getSaldo()+dinero;
-			String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentadestino.getNumCuenta();
+			cuentAux= buscarPorNumCuenta(cuentadestino);
+			saldoIngresado = cuentAux.getSaldo()+dinero;
+			String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentAux.getNumCuenta();
 			filasInsertadas = ejecutarModificacion(sentenciaModificada);
 			if(filasInsertadas == 1) {
 				ingresado=true;

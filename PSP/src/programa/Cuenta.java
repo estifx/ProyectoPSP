@@ -7,19 +7,11 @@ public class Cuenta implements Serializable {
 	private int numCuenta;
 	private double saldo;
 	private Usuario usuario;
-	private MovimientosCuenta movCuenta;
 	
-	public Cuenta(int numCuenta, double saldo, Usuario usuario, MovimientosCuenta movCuenta) {
-		this.numCuenta = numCuenta;
-		this.saldo = saldo;
-		this.usuario = usuario;
-		this.movCuenta = movCuenta;
-	}
 	public Cuenta(int numCuenta, double saldo, Usuario usuario) {
 		this.numCuenta = numCuenta;
 		this.saldo = saldo;
 		this.usuario = usuario;
-		this.movCuenta = movCuenta;
 	}
 	public Cuenta(int numCuenta, double saldo) {
 		this.numCuenta = numCuenta;
@@ -32,7 +24,7 @@ public class Cuenta implements Serializable {
 	@Override
 	public String toString() {
 		return "Cuenta \n [# de Cuenta:" + numCuenta + ", Saldo: " + saldo + ", Usuario:" 
-	+ usuario.toString() + "\n Últimos movimientos en cuenta: \t\n "+ movCuenta.toString() +"]";
+	+ usuario.toString() + "]";
 	}
 
 	public int getNumCuenta() {
@@ -58,13 +50,4 @@ public class Cuenta implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-
-	public MovimientosCuenta getMovCuenta() {
-		return movCuenta;
-	}
-
-	public void setMovCuenta(MovimientosCuenta movCuenta) {
-		this.movCuenta = movCuenta;
-	}
-
 }
