@@ -103,7 +103,7 @@ public class Cliente {
 		
 		Cuenta cuenta;
 		String cadena;
-		int numCuenta=0, opcion;
+		int numCuenta=0,numCuentaDestino=0, opcion;
 		double saldo, cantidad;
 
 		if(!comprobar) {
@@ -135,10 +135,11 @@ public class Cliente {
 				objeto = cuenta;
 			}
 			else if(opcion == 3) {
+				numCuentaDestino =Teclado.leerEntero("Indica cuenta a la que deseas realizar la transferencia:");
 				cantidad= Teclado.leerReal("Indica cantidad a transferir:");
 				numCuenta = cuentaGuardada.getNumCuenta();
 				Cuenta cuentaOrigen = new Cuenta(numCuenta);
-				Cuenta cuentaDestino = new Cuenta(numCuenta);
+				Cuenta cuentaDestino = new Cuenta(numCuentaDestino);
 				transferencia = new Transferencia(cuentaOrigen, cuentaDestino,cantidad);
 				transferenciaRealizada(transferencia);
 			}
