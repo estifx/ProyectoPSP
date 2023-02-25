@@ -75,13 +75,13 @@ public class Operaciones {
 			Class.forName(NOMBRE_DRIVER);
 			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
 			String sentenciaConsultar = "SELECT * FROM cuenta "+
-					"WHERE dni = '" + dni + "'";
+					"WHERE dni_usuario = '" + dni + "'";
 			Statement sentencia = conexion.createStatement();
 			ResultSet resultados = sentencia.executeQuery(sentenciaConsultar);	
 			if(resultados.next()) {
 				numCuenta = resultados.getInt("num_cuenta");
 				saldo = resultados.getDouble("saldo");
-				usuario = new Usuario(resultados.getString("dni_usurio"));
+				usuario = new Usuario(resultados.getString("dni_usuario"));
 				cuenta = new Cuenta(numCuenta, saldo, usuario);
 			}
 			resultados.close();

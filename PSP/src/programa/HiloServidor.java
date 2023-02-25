@@ -90,6 +90,7 @@ public class HiloServidor extends Thread{
 		Cuenta cuenta;
 		int numCuenta=0;
 		String mensaje;
+		
 		cuenta = Operaciones.comprobarUsuario(usuario);
 		numCuenta = cuenta.getNumCuenta();
 		if(numCuenta != 0){
