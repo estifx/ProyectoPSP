@@ -8,6 +8,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 import entrada.Teclado;
 
 public class Cliente {
@@ -15,21 +18,25 @@ public class Cliente {
 	public static Usuario usuarioGuardado;
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		System.setProperty("javax.net.ssl.trustStore", "./Certificados SSL/AlmacenClienteSSL"); 
+		System.setProperty("javax.net.ssl.trustStorePassword", "741258");
+		
 		String cadena = "", mensaje;
-		String host = "localhost"; 
+		String host = "localhost";
+		int puerto = 60000;
+		
+		SSLSocketFactory sfact = (SSLSocketFactory) SSLSocketFactory.getDefault(); 
+		SSLSocket cliente = (SSLSocket) sfact.createSocket(host, puerto);
+		
 		Usuario usuario;
 		TransferenciaCuentas transferencia=null;
 		Object objeto = null;
-		int puerto = 60000;
-
-		Socket cliente = new Socket(host, puerto);
-		//Comunicación con servidor
+		
+		//Objetos para comunicación con servidor
 		ObjectInputStream objetoEntrada= null;
 		ObjectOutputStream objetoSalida= null;
 
-		System.out.println("*************Cliente*************");
-
-		//BufferedReader in = new BufferedReader (new InputStreamReader(System.in)); 
+		System.out.println("*************Cliente Iniciado*************");
 
 		objetoSalida = new ObjectOutputStream(cliente.getOutputStream());
 		objetoEntrada = new ObjectInputStream(cliente.getInputStream());
@@ -47,6 +54,10 @@ public class Cliente {
 					if(mensaje.equals("existe")) {
 						sesionAbierta(mensaje);
 						System.out.println("Sesión abierta");
+					}
+					else if(mensaje.equals("no existe")) {
+						System.out.println("****Email o contraseña incorrecta****");
+						System.out.println("");
 					}
 					else if(mensaje.equals("salir")) {
 						cadena = mensaje;
@@ -100,10 +111,14 @@ public class Cliente {
 			visualizarMenuOpciones();
 			opcion=Teclado.leerEntero("Operación a realizar:");
 			if(opcion == 1) {
-				numCuenta = Teclado.leerEntero("¿Número de cuenta?");
-				saldo= Teclado.leerReal("¿Cantidad a ingresar?");
+				numCuenta= Teclado.leerEntero("Indique número de cuenta");
+				saldo= Teclado.leerReal("¿Cantidad a ingresar a su cuenta?");
 				cuenta = new Cuenta(numCuenta, saldo);
 				objeto = cuenta;
+				/*
+				 * transferencia = new TransferenciaCuentas(usuarioGuardado, saldo);
+				objeto = transferencia;
+				 */
 			}
 			else if(opcion == 2) {
 				System.out.println("Indica la cuenta a la que deseas realizar la transferencia:");
@@ -114,6 +129,9 @@ public class Cliente {
 			}
 			else if(opcion == 3) {
 				
+			}
+			else if(opcion == 0) {
+				objeto ="exit";
 			}
 		}
 		return objeto;
@@ -150,7 +168,7 @@ public class Cliente {
 		System.out.println("(0) Salir.");
 		System.out.println("(1) Ingresar saldo a cuenta.");
 		System.out.println("(2) Consultar saldo de cuenta.");
-		System.out.println("(3) Transferir monto a otra cuenta.");
+		System.out.println("(3) Transferir a otra cuenta.");
 		System.out.println("*************************************************************");
 	}
 }
