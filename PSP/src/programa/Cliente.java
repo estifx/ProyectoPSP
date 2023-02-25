@@ -12,6 +12,7 @@ import entrada.Teclado;
 public class Cliente {
 	public static boolean comprobar=false;
 	public static Usuario usuarioGuardado;
+	public static Cuenta cuentaGuardada;
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		System.setProperty("javax.net.ssl.trustStore", "./Certificados SSL/AlmacenClienteSSL"); 
@@ -25,6 +26,7 @@ public class Cliente {
 		SSLSocket cliente = (SSLSocket) sfact.createSocket(host, puerto);
 		
 		Usuario usuario;
+		
 		Transferencia transferencia=null;
 		Object objeto = null;
 		
@@ -51,12 +53,13 @@ public class Cliente {
 						cadena = mensaje;
 					}
 					else if(mensaje.equals("ingresado")) {
-						System.out.println("Ingreso realizado con éxito");
+						System.out.println("****Ingreso realizado con éxito****");
 					}
 				}
 				else if(objeto instanceof Cuenta) {
 					sesionAbierta((Cuenta)objeto);
 					if(comprobar) {
+						cuentaGuardada =(Cuenta)objeto;
 						System.out.println("Sesión abierta");
 					}
 					else {
@@ -97,8 +100,8 @@ public class Cliente {
 
 		if(!comprobar) {
 			System.out.println("Iniciar sesión");
-			email = Teclado.leerCadena("Email:");
-			contrasena = Teclado.leerCadena("Contrasena:");
+			email = Teclado.leerCadena("Email: ");
+			contrasena = Teclado.leerCadena("Contraseña: ");
 			usuario = new Usuario(email, contrasena);
 			objeto = usuario;
 			usuarioGuardado= usuario;
@@ -108,22 +111,18 @@ public class Cliente {
 			visualizarMenuOpciones();
 			opcion=Teclado.leerEntero("Operación a realizar:");
 			if(opcion == 1) {
-				numCuenta= Teclado.leerEntero("Indique número de cuenta");
-				saldo= Teclado.leerReal("¿Cantidad a ingresar a su cuenta?");
+				numCuenta = cuentaGuardada.getNumCuenta();
+				saldo = Teclado.leerReal("¿Cantidad a ingresar a tu cuenta?");
 				cuenta = new Cuenta(numCuenta, saldo);
 				objeto = cuenta;
-				/*
-				 * transferencia = new TransferenciaCuentas(usuarioGuardado, saldo);
-				objeto = transferencia;
-				 */
 			}
 			else if(opcion == 2) {
+				
+			}
+			else if(opcion == 3) {
 				cantidad= Teclado.leerReal("Indica cantidad a transferir:");
 				transferencia = new Transferencia(numCuenta,cantidad);
 				transferenciaRealizada(transferencia);
-			}
-			else if(opcion == 3) {
-				
 			}
 			else if(opcion == 0) {
 				objeto ="exit";
@@ -139,6 +138,7 @@ public class Cliente {
 	}
 	
 	public static void ingresarSaldo(Cuenta cuenta) {
+		
 		
 	}
 	public static void transferenciaRealizada(Transferencia transferencia) {
