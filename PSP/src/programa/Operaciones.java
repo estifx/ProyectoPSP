@@ -146,10 +146,10 @@ public class Operaciones {
 	//transferencia
 	
 	
-	 public static boolean Transferencia (Transferencia trans , Double cantidadAingresar) throws ClassNotFoundException, SQLException {
+	 public static boolean Transferencia (Transferencia trans ) throws ClassNotFoundException, SQLException {
 		 boolean transferido =false;
-			 if ((!CuentaOrigen(trans.getCuentaOrigen(), cantidadAingresar))
-				&& (!CuentaDestino(trans.getCuentaOrigen(), cantidadAingresar)) ) 
+			 if ((!CuentaOrigen(trans.getCuentaOrigen(),trans.getCantidadATransferir()))
+				&& (!CuentaDestino(trans.getCuentaOrigen(),trans.getCantidadATransferir())) ) 
 			 {
 				transferido =true;
 			} 
