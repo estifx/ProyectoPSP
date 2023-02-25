@@ -66,7 +66,7 @@ public class Operaciones {
 	}
 	public static Cuenta consultarCuentaXdni(int dni) throws ClassNotFoundException, SQLException {
 		Connection conexion = null;
-		Cuenta cuenta;
+		Cuenta cuenta = null;
 		Usuario usuario;
 		double saldo;
 		int numCuenta;
@@ -80,7 +80,7 @@ public class Operaciones {
 			if(resultados.next()) {
 				numCuenta = resultados.getInt("num_cuenta");
 				saldo = resultados.getDouble("saldo");
-				//usuario = (resultados.getString("dni"));
+				usuario = new Usuario(resultados.getString("dni_usurio"));
 				cuenta = new Cuenta(numCuenta, saldo, usuario);
 			}
 			resultados.close();
@@ -141,5 +141,13 @@ public class Operaciones {
 		}
 		return insertado;
 	}
+	
+	//transferencia
+	
+	
+	
+	
+	
+	
 
 }
