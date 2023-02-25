@@ -107,7 +107,16 @@ public class HiloServidor extends Thread{
 	}
 	public synchronized Object transferirEntreCuentas() throws ClassNotFoundException, SQLException{
 		Object objeto = null;
-		
+		String mensaje;
+		if(Operaciones.comprobarUsuario(null)) {
+			mensaje="transferencia realizada";
+			objeto= mensaje;
+		}
+		else {
+			mensaje ="saldo insuficiente";
+			objeto= mensaje;
+		}
+
 		return objeto;
 	}
 
