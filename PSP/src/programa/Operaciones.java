@@ -13,6 +13,8 @@ public class Operaciones {
 	public static final String NOMBRE_BASE_DATOS = "data\\cuentasBancarias.db";
 	public static final String NOMBRE_CONEXION ="jdbc:sqlite:" + NOMBRE_BASE_DATOS;
 
+	//Método para crear la conexión con la BD
+	//y realizar modificaciones según el tipo de sentencia que le indiquemos como parámetro.
 	public static int ejecutarModificacion(String sentenciaInsertar)
 			throws SQLException, ClassNotFoundException{
 		Connection conexion = null;
@@ -33,7 +35,6 @@ public class Operaciones {
 		}
 		return filasModificadas;
 	}
-
 
 	//comprobar usuario en BD
 	public static Cuenta comprobarUsuario(Usuario usuario)
@@ -65,6 +66,7 @@ public class Operaciones {
 		}		
 		return cuenta;
 	}
+	//Consultar una cuenta pasando como parámetro el dni
 	public static Cuenta consultarCuentaXdni(String dni) throws ClassNotFoundException, SQLException {
 		Connection conexion = null;
 		Cuenta cuenta = null;
@@ -96,7 +98,7 @@ public class Operaciones {
 		return cuenta;
 	}
 
-	//ConsultarSaldo hecho
+	//Método para consultar el saldo de una cuenta por número de cuenta
 
 	public static double consultarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
 		int numCuenta;
@@ -121,7 +123,7 @@ public class Operaciones {
 		return saldoActual;
 	}
 
-
+	//Método para ingresar saldo a una cuenta
 	public static boolean ingresarSaldo(Cuenta cuenta)throws SQLException, ClassNotFoundException {
 		boolean transferido=false;
 		double saldo, saldoAntiguo;
@@ -138,109 +140,62 @@ public class Operaciones {
 		return transferido;
 	}
 
-	//Insertar usuarios en BD para pruebas
 
-	public static void crearUsuario() throws ClassNotFoundException, SQLException {
-		Usuario usuario=null;
-		boolean creado = false;
-		String nombre, contrasena, email, telefono, dni;
-
-		usuario = new Usuario ("H12742538","Alejandro Martínez","alemartinez@gmail.com", "Alem", "636874241");
-		if(insertarUsuario(usuario)) {
-			creado = true;
-		} 
-	}
-
-	public static boolean insertarUsuario(Usuario usuario)
-			throws SQLException, ClassNotFoundException {
-		boolean insertado = false;
-		int filasInsertadas= 0;
-		String sentenciaInsertar = "INSERT INTO usuario (dni, nombre, email,"
-				+ " contrasena, telefono)" +
-				"VALUES ('" + usuario.getDni() + 
-				"', '" + usuario.getNombre() +
-				"', '" + usuario.getEmail() +
-				"', '" + usuario.getContrasena() +
-				"','" + usuario.getTelefono()+ "')";
-		filasInsertadas =  ejecutarModificacion(sentenciaInsertar);
-		if(filasInsertadas == 1) {
-			insertado=true;
-		}
-		return insertado;
-	}
-
-	//transferencia hecha
-
+	//Método transferir que comprueba que la cuenta origen a restado de su saldo la cantidad a sumar en cuenta destino
 
 	public static Transferencia transferencia (Transferencia trans) throws ClassNotFoundException, SQLException {
 		Transferencia transferencia= null;
 		Cuenta nuevaCuentaO,nuevaCuentaD;
 
-		if ((cuentaOrigen(trans.getCuentaOrigen(),trans.getCantidadATransferir()))
-				&& (cuentaDestino(trans.getCuentaDestino(),trans.getCantidadATransferir())) ) {
-			nuevaCuentaO= buscarPorNumCuenta(trans.getCuentaOrigen());
-			nuevaCuentaD= buscarPorNumCuenta(trans.getCuentaDestino());
+		if ((actualizarSaldoCuentaOrigen(trans.getCuentaOrigen(),trans.getCantidadATransferir()))
+				&& (actualizarSaldoCuentaDestino(trans.getCuentaDestino(),trans.getCantidadATransferir())) ) {
+			nuevaCuentaO= consultarPorNumCuenta(trans.getCuentaOrigen());
+			nuevaCuentaD= consultarPorNumCuenta(trans.getCuentaDestino());
 			transferencia = new Transferencia(nuevaCuentaO,nuevaCuentaD);
 		} 
 		return transferencia;
 	}
 
-
-	public static boolean cuentaOrigen(Cuenta  cuentaorigen , double dinero) throws SQLException, ClassNotFoundException {
+	//Método para actualizar saldo de cuenta origen
+	public static boolean actualizarSaldoCuentaOrigen(Cuenta  cuentaorigen , double dinero) throws SQLException, ClassNotFoundException {
 		boolean descontado =false;
-		Connection conexion = null;
 		Cuenta cuentAux;
 		double saldodescontado  = 0;
 		int filasInsertadas=0;
-		try {
-			Class.forName(NOMBRE_DRIVER);
-			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
-			cuentAux= buscarPorNumCuenta(cuentaorigen);
-			if (cuentAux.getSaldo()>0) {
-				saldodescontado = cuentAux.getSaldo()- dinero;
-				String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldodescontado + " WHERE num_cuenta = "+cuentAux.getNumCuenta();
-				filasInsertadas = ejecutarModificacion(sentenciaModificada);
-				if(filasInsertadas == 1) {
-					descontado=true;
-				}
-			} 
 
-		} finally {
-			if (conexion != null) {
-				conexion.close();
+		cuentAux= consultarPorNumCuenta(cuentaorigen);
+		if (cuentAux.getSaldo()>0) {
+			saldodescontado = cuentAux.getSaldo()- dinero;
+			String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldodescontado + " WHERE num_cuenta = "+cuentAux.getNumCuenta();
+			filasInsertadas = ejecutarModificacion(sentenciaModificada);
+			if(filasInsertadas == 1) {
+				descontado=true;
 			}
-		}
+		} 
 
 		return descontado;
 	}
 
-
-	public static boolean cuentaDestino(Cuenta cuentadestino , double dinero) throws SQLException, ClassNotFoundException {
+	//Método para actualizar saldo de cuenta destino
+	public static boolean actualizarSaldoCuentaDestino(Cuenta cuentadestino , double dinero) throws SQLException, ClassNotFoundException {
 		boolean ingresado = false;
 		Connection conexion = null;
 		Cuenta cuentAux;
 		double saldoIngresado= 0;
 		int filasInsertadas  =0;
-		try {
-			Class.forName(NOMBRE_DRIVER);
-			conexion = DriverManager.getConnection(NOMBRE_CONEXION);
-			cuentAux= buscarPorNumCuenta(cuentadestino);
-			saldoIngresado = cuentAux.getSaldo()+dinero;
-			String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentAux.getNumCuenta();
-			filasInsertadas = ejecutarModificacion(sentenciaModificada);
-			if(filasInsertadas == 1) {
-				ingresado=true;
-			}
-		} finally {
-			if (conexion != null) {
-				conexion.close();
-			}
-		}
 
+		cuentAux= consultarPorNumCuenta(cuentadestino);
+		saldoIngresado = cuentAux.getSaldo()+dinero;
+		String sentenciaModificada ="UPDATE cuenta SET saldo = "+ saldoIngresado + " WHERE num_cuenta = "+cuentAux.getNumCuenta();
+		filasInsertadas = ejecutarModificacion(sentenciaModificada);
+		if(filasInsertadas == 1) {
+			ingresado=true;
+		}
 		return ingresado;
 	}
 
-	public static Cuenta buscarPorNumCuenta(Cuenta cuenta) throws SQLException, ClassNotFoundException {
+	//Método para obtener una cuenta completa, pasando como parámetro número de cuenta
+	public static Cuenta consultarPorNumCuenta(Cuenta cuenta) throws SQLException, ClassNotFoundException {
 		Connection conexion=null;
 		Cuenta nuevaCuenta = null;
 		int numCuenta;
@@ -268,9 +223,5 @@ public class Operaciones {
 		}		
 		return nuevaCuenta;
 	}
-
-
-
-
 
 }

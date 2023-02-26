@@ -15,8 +15,6 @@ public class Cliente {
 	public static Usuario usuarioGuardado;
 	public static Cuenta cuentaGuardada;
 	public static String email,contrasena;
-	public static Login login;
-	public static boolean ventanaCerrada= false;
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		System.setProperty("javax.net.ssl.trustStore", "./Certificados SSL/AlmacenClienteSSL"); 
@@ -28,9 +26,7 @@ public class Cliente {
 		
 		SSLSocketFactory sfact = (SSLSocketFactory) SSLSocketFactory.getDefault(); 
 		SSLSocket cliente = (SSLSocket) sfact.createSocket(host, puerto);
-		
-		Usuario usuario;
-	
+
 		Transferencia transferencia;
 		Object objeto = null;
 		
@@ -102,13 +98,10 @@ public class Cliente {
 		Usuario usuario;
 		
 		Cuenta cuenta;
-		String cadena;
 		int numCuenta=0,numCuentaDestino=0, opcion;
 		double saldo, cantidad;
 
 		if(!comprobar) {
-			//login = new Login();
-			//login.setVisible(true);
 			System.out.println("Iniciar sesión");
 			email = Teclado.leerCadena("Email: ");
 			contrasena = Teclado.leerCadena("Contraseña: ");
@@ -116,11 +109,7 @@ public class Cliente {
 			objeto = usuario;
 			usuarioGuardado= usuario;
 		}
-		else if(login.cerrar) {
-			objeto ="exit";
-		}
 		else {
-			//desde buffered hasta cadena se debe sustituir por el botón seleccionado del menú de usuarios
 			visualizarMenuOpciones();
 			opcion=Teclado.leerEntero("Operación a realizar:");
 			if(opcion == 1) {
@@ -174,11 +163,6 @@ public class Cliente {
 		}
 
 	}
-	
-	public static void ventanaCerrada() {
-		ventanaCerrada = true;
-	}
-	
 	public static void visualizarMenuOpciones() {
 		System.out.println("*************************************************************");
 		System.out.println("(0) Salir.");
